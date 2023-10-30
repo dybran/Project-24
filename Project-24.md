@@ -475,7 +475,7 @@ verify
 
 `$ helm version`
 
-1[](./images/hh.PNG)
+![](./images/hh.PNG)
 
 
 

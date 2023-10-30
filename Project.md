@@ -19,8 +19,13 @@ Create a directory on your local machine - __eks__ and create an s3 bucket
 ![](./images/ekst.PNG)
 ![](./images/ekstt.PNG)
 
+Create a file – __backend.tf__ Task for you, ensure the backend is configured for remote state.
 
+Create a file – __network.tf__ and provision Elastic IP for Nat Gateway, VPC, Private and public subnets.
 
+__See Terraform code [here]()__
+
+The tags added to the subnets is very important. The Kubernetes Cloud Controller Manager (cloud-controller-manager) and AWS Load Balancer Controller (aws-load-balancer-controller) needs to identify the cluster’s. To do that, it querries the cluster’s subnets by using the tags as a filter.
 
 
 

@@ -362,6 +362,11 @@ Create kubeconfig file using awscli.
 
 ![](./images/kbc.PNG)
 
+Configure kubectl
+
+After the cluster is created, you need to configure kubectl to connect to the cluster. Run the command
+
+`$ aws eks --region us-east-1 update-kubeconfig --name deploy`
 
 __DEPLOY APPLICATIONS WITH HELM__
 
@@ -442,9 +447,9 @@ spec:
 
 This illustration showcases several aspects of Helm templates:
 
-- The template employs YAML as its foundation, utilizing the __{{ }}__ mustache syntax to specify dynamic sections.
+- The template employs YAML as its foundation, utilizing the __{{ }}__ syntax to specify dynamic sections.
 
-- Helm offers a range of variables that are populated during installation. For instance, __{{.Release.Name}} __enables you to modify the resource's name dynamically by using the release name. When you install a Helm chart, it generates a release (a Helm concept, distinct from Kubernetes).
+- Helm offers a range of variables that are populated during installation. For instance, __{{.Release.Name}}__ enables you to modify the resource's name dynamically by using the release name. When you install a Helm chart, it generates a release (a Helm concept, distinct from Kubernetes).
 
 - You have the flexibility to create helper functions in external files. The __{{template "name"}}__ invocation yields a secure name for the application based on the Helm chart's name, which can be overridden if necessary. Utilizing these helper functions helps minimize redundancy in static values (such as "tooling-app") and reduces the likelihood of typographical errors.
 
@@ -478,6 +483,30 @@ verify
 
 ![](./images/hh.PNG)
 
+__DEPLOY JENKINS WITH HELM__
+
+Utilizing publicly accessible charts to effortlessly employ the requisite tools.
+
+Helm offers a remarkable capability: the ability to deploy pre-packaged applications directly from a public Helm repository with minimal configuration. A prime illustration of this capability is demonstrated when deploying Jenkins.
+
+To find pre-packaged applications in the form of Helm Charts, visit the [Artifact Hub](https://artifacthub.io/packages/search).
+
+Search for Jenkins.
+
+Integrate the repository with Helm to simplify the download and deployment process.
+
+`$ helm repo add jenkins https://charts.jenkins.io`
+
+Update helm repo
+
+`$ helm repo update`
+
+![](./images/11.PNG)
+
+Install the chart
+
+`$ helm install jenkins jenkins/jenkins`
+
 
 
 
@@ -498,4 +527,13 @@ __PROBLEMS ENCOUNTERED__
 __UnsupportedAvailabilityZoneException:__ This exception is typically thrown when you attempt to perform an operation or allocate a resource in an availability zone that does not support that specific operation or resource type.
 
 __SOLUTION__
-- I had to switch to another region on the aws console.
+I needed to change the AWS console region, which required me to reconfigure my 
+__awscli__. To accomplish this, I executed a command to switch the region from __us-east-1__ to __us-west-1__.
+
+`$ aws configure`
+
+![](./images/21.PNG)
+
+I created the bucket
+
+`$ aws s3api create-bucket --bucket eks-terraform-deploy --create-bucket-configuration LocationConstraint=us-west-1`

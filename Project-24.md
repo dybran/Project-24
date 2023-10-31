@@ -86,8 +86,6 @@ module "vpc" {
 }
 ```
 
-__See Terraform code [here](https://github.com/dybran/Project-24/tree/main/terraform-eks)__
-
 The tags added to the subnets is very important. The Kubernetes Cloud Controller Manager (cloud-controller-manager) and AWS Load Balancer Controller (aws-load-balancer-controller) needs to identify the cluster’s. To do that, it querries the cluster’s subnets by using the tags as a filter.
 
 For public and private subnets that use load balancer resources: each subnet must be tagged
@@ -289,6 +287,9 @@ provider "aws" {
 provider "random" {
 }
 ```
+
+__See Terraform code [here](https://github.com/dybran/Project-24/tree/main/terraform-eks)__
+
 Open Powershell and run as administrator and install terraform using __chocolatey__ package manager
 
 `$ choco install terraform -y`

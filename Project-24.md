@@ -356,17 +356,11 @@ Run
 ![](./images/qw.PNG)
 ![](./images/rf.PNG)
 
-Create kubeconfig file using awscli.
+Create kubeconfig file using awscli and connect to the kubectl.
 
 `$ aws eks update-kubeconfig --name dybran-eks-tooling --region us-west-1 --kubeconfig kubeconfig`
 
 ![](./images/kbc.PNG)
-
-Configure kubectl
-
-After the cluster is created, you need to configure kubectl to connect to the cluster. Run the command
-
-`$ aws eks --region us-east-1 update-kubeconfig --name deploy`
 
 __DEPLOY APPLICATIONS WITH HELM__
 
@@ -507,7 +501,11 @@ Install the chart
 
 `$ helm install jenkins jenkins/jenkins`
 
+Check the helm deployment
 
+`$ helm ls`
+
+![](./images/js.PNG)
 
 
 

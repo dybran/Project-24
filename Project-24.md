@@ -525,4 +525,5 @@ __PROBLEMS ENCOUNTERED__
 __UnsupportedAvailabilityZoneException:__ This exception is typically thrown when you attempt to perform an operation or allocate a resource in an availability zone that does not support that specific operation or resource type.
 
 __SOLUTION__
+
 I needed to change the region in the `provider.tf` to switch the region to another region i.e __us-east-1__ to __us-west-1__.

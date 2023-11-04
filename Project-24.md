@@ -509,7 +509,7 @@ Check the helm deployment
 
 `$ helm ls`
 
-![](./images/j.PNG)
+![](./images/js.PNG)
 
 Get the pod
 

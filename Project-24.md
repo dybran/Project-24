@@ -483,6 +483,10 @@ Utilizing publicly accessible charts to effortlessly employ the requisite tools.
 
 Helm offers a remarkable capability: the ability to deploy pre-packaged applications directly from a public Helm repository with minimal configuration. A prime illustration of this capability is demonstrated when deploying Jenkins.
 
+Create a namespace __jenkins__
+
+`$ kubectl create ns jenkins`
+
 To find pre-packaged applications in the form of Helm Charts, visit the [Artifact Hub](https://artifacthub.io/packages/search).
 
 Search for Jenkins.
@@ -497,15 +501,92 @@ Update helm repo
 
 ![](./images/11.PNG)
 
-Install the chart
+Install the chart in the namespace created earlier
 
-`$ helm install jenkins jenkins/jenkins`
+`$ helm install jenkins jenkins/jenkins -n jenkins`
 
 Check the helm deployment
 
 `$ helm ls`
 
-![](./images/js.PNG)
+![](./images/j.PNG)
+
+Get the pod
+
+`$ kubectl get pods`
+
+![](./images/321.PNG)
+
+Describe the pod
+
+`$ kubectl describe pod jenkins-0 -n jenkins`
+
+![](./images/j1.PNG)
+![](./images/j2.PNG)
+
+Check the logs of the running pod
+
+`$ kubectl logs jenkins-0 -n jenkins`
+
+![](./images/fr.PNG)
+
+This is because the pod has a __Sidecar container__ alongside with the Jenkins container. As you can see from the error output, there is a list of containers inside the pod __[jenkins config-reload]__ i.e jenkins and config-reload containers. The job of the config-reload is mainly to help Jenkins to reload its configuration without recreating the pod.
+
+Therefore we need to let __kubectl__ know, which pod we are interested to see its log. 
+
+Run the command to specify __jenkins__
+
+`$ kubectl logs jenkins-0 -c jenkins -n jenkins`
+
+![](./images/j5.PNG)
+
+
+__Managing kubeconfig files__
+
+Kubectl expects to find the default kubeconfig file in the location ~/.kube/config. But what if you already have another cluster using that same file? It doesn’t make sense to overwrite it. What you will do is to merge all the kubeconfig files together using a kubectl plugin called [konfig](https://github.com/corneliusweig/konfig) and select whichever one you need to be active.
+
+Install a package manager for kubectl called __krew__ so it will enable us install plugins to extend the functionality of kubectl. Read more about it [__here__](https://krew.sigs.k8s.io/docs/user-guide/setup/install/).
+
+
+Make sure that __git__ is installed.
+
+Run this command to download and install krew:
+
+```
+(
+  set -x; cd "$(mktemp -d)" &&
+  OS="$(uname | tr '[:upper:]' '[:lower:]')" &&
+  ARCH="$(uname -m | sed -e 's/x86_64/amd64/' -e 's/\(arm\)\(64\)\?.*/\1\2/' -e 's/aarch64$/arm64/')" &&
+  KREW="krew-${OS}_${ARCH}" &&
+  curl -fsSLO "https://github.com/kubernetes-sigs/krew/releases/latest/download/${KREW}.tar.gz" &&
+  tar zxvf "${KREW}.tar.gz" &&
+  ./"${KREW}" install krew
+)
+```
+![](./images/krew.PNG)
+
+Add the __$HOME/.krew/bin__ directory to your PATH environment variable. To do this, update your __.bashrc or .zshrc__ file and append the following line:
+
+`$ export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"`
+
+and restart the shell.
+
+To check the installation
+
+`$kubectl krew version`
+
+![](./images/krw.PNG)
+
+Install the [konfig plugin](https://github.com/corneliusweig/konfig)
+
+`$ kubectl krew install konfig`
+
+![](./images/kfg.PNG)
+
+
+
+
+
 
 
 
@@ -518,7 +599,7 @@ Check the helm deployment
 
 __PROBLEMS ENCOUNTERED__
 
-- When I ran `terraform apply`, I got this error
+__1.__ When I ran `terraform apply`, I got this error
 
 ![](./images/error.PNG)
 
@@ -527,3 +608,49 @@ __UnsupportedAvailabilityZoneException:__ This exception is typically thrown whe
 __SOLUTION__
 
 I needed to change the region in the `provider.tf` to switch the region to another region i.e __us-east-1__ to __us-west-1__.
+
+__2.__ Jenkins deployment, sourced from the Helm repository, encountered a pending status. Upon investigation, it became evident that the __Container Storage Interface (CSI)__ driver was missing within the Amazon Elastic Kubernetes Service (EKS) cluster.
+
+To address this issue, I took the following steps:
+
+I created a file __csi.tf__  for the __CSI driver__
+
+```
+data "aws_iam_policy" "ebs_csi_policy" {
+  arn = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
+}
+
+module "irsa-ebs-csi" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
+  version = "4.7.0"
+
+  create_role                   = true
+  role_name                     = "AmazonEKSTFEBSCSIRole-${var.cluster_name}"
+  provider_url                  = module.eks_cluster.oidc_provider
+  role_policy_arns              = [data.aws_iam_policy.ebs_csi_policy.arn]
+  oidc_fully_qualified_subjects = ["system:serviceaccount:kube-system:ebs-csi-controller-sa"]
+}
+
+resource "aws_eks_addon" "ebs-csi" {
+  cluster_name             = var.cluster_name
+  addon_name               = "aws-ebs-csi-driver"
+  service_account_role_arn = module.irsa-ebs-csi.iam_role_arn
+  tags = {
+    "eks_addon" = "ebs-csi"
+    "terraform" = "true"
+  }
+}
+```
+Read more about __CSI drivers__ [__here__](https://docs.aws.amazon.com/eks/latest/userguide/eks-add-ons.html).
+
+I installed the necessary module using the command 
+
+`$ terraform init`
+
+Subsequently, I executed
+
+`$ terraform plan` 
+
+and 
+
+`$ terraform apply`

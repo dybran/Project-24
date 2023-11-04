@@ -14,7 +14,7 @@ Create a directory on your local machine - __eks__ and create an s3 bucket
 
 `$ mkdir eks && cd eks`
 
-`$ aws s3api create-bucket --bucket eks-terraform-deploy --region us-east-1`
+`$ aws s3api create-bucket --bucket eks-terraform-deploy --region us-west-1`
 
 ![](./images/ekst.PNG)
 ![](./images/ekstt.PNG)

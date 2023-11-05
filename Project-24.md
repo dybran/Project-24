@@ -583,19 +583,61 @@ Install the [konfig plugin](https://github.com/corneliusweig/konfig)
 
 ![](./images/kfg.PNG)
 
+`$ konfig version`
+
+![](./images/vv.PNG)
+
+__Context__ refers to a set of configuration details that determine which Kubernetes cluster and namespace you are currently interacting with. Contexts are used to manage multiple Kubernetes clusters and namespaces and switch between them easily. They are particularly helpful when you are working with multiple clusters, such as development, staging, and production environments, or when you need to switch between different namespaces within a cluster.
+
+A Kubernetes context typically includes the following information:
+
+__Cluster:__ This specifies the details of the Kubernetes cluster you want to work with. It includes the cluster's API server address, certificate authority data, and the cluster name.
+
+__User:__ This defines the user's credentials, such as a client certificate and private key or an authentication token.
+
+__Namespace:__ This specifies the default namespace to use within the cluster. The namespace is where your Kubernetes resources, such as pods, services, and deployments, will be created unless you specify otherwise.
+
+You can use the kubectl command-line tool to manage contexts. Here are some common kubectl commands related to contexts:
+
+List available contexts:
+
+`$ kubectl config get-contexts`
 
 
+Switch to a different context:
 
+`$ kubectl config use-context context-name`
 
+Display the current context. This will let you know the context in which you are using to interact with Kubernetes.
 
+`$ kubectl config current-context`
 
+![](./images/conv.PNG)
 
+__Contexts__ are useful for managing and switching between different Kubernetes environments and avoiding accidental changes to the wrong cluster or namespace. They help streamline your workflow when dealing with complex Kubernetes configurations and multiple clusters or namespaces.
 
+__Accessing the Jenkins UI__
+ From the output we got when we installed the jenkins using helm.
 
+ ![](./images/333.PNG)
 
+Set up the jenkins through the UI, we need to get the admin password
 
+`$ kubectl exec --namespace jenkins -it svc/jenkins -c jenkins -- /bin/cat /run/secrets/additional/chart-admin-password && echo`
 
+Accessing the jenkins through the UI, we need to __port forward__.
 
+`$ kubectl --namespace jenkins port-forward svc/jenkins 8080:8080`
+
+![](./images/port.PNG)
+
+Port forwarding in Kubernetes is a way to access a specific port of a container running within a Kubernetes cluster from outside the cluster. It allows you to establish a temporary network connection from your local machine or another system to a specific port of a pod in the Kubernetes cluster, enabling you to interact with the application or service running in that pod. Port forwarding is commonly used for debugging, testing, or accessing services that are not exposed publicly.
+
+Go to the browser and access the Jenkins using __127.0.0.1:8080__
+
+![](./images/jpp.PNG)
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 __PROBLEMS ENCOUNTERED__
 

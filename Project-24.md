@@ -685,7 +685,7 @@ __SOLUTION__
 
 I needed to change the region in the `provider.tf` to switch the region to another region i.e __us-east-1__ to __us-west-1__.
 
-__2.__ Jenkins deployment, sourced from the Helm repository, encountered a pending status. Upon investigation, it became evident that the __Container Storage Interface (CSI)__ driver was missing within the Amazon Elastic Kubernetes Service (EKS) cluster.
+__2.__ The Jenkins deployment pulled from the Helm repository faced a "pending" status, prompting an examination that revealed the absence of the __Container Storage Interface (CSI) driver__ in the Amazon Elastic Kubernetes Service (EKS) cluster.
 
 To address this issue, I took the following steps:
 
@@ -717,13 +717,13 @@ resource "aws_eks_addon" "ebs-csi" {
   }
 }
 ```
-Read more about __CSI drivers__ [__here__](https://docs.aws.amazon.com/eks/latest/userguide/eks-add-ons.html).
+Read more about __EKS add-on__ [__here__](https://docs.aws.amazon.com/eks/latest/userguide/eks-add-ons.html).
 
 I installed the necessary module using the command 
 
 `$ terraform init`
 
-Subsequently, I executed
+Then ran the commands
 
 `$ terraform plan` 
 

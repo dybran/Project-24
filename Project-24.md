@@ -687,9 +687,12 @@ I needed to change the region in the `provider.tf` to switch the region to anoth
 
 __2.__ The Jenkins deployment pulled from the Helm repository faced a "pending" status, prompting an examination that revealed the absence of the __Container Storage Interface (CSI) driver__ in the Amazon Elastic Kubernetes Service (EKS) cluster.
 
+
+__SOLUTION__
+
 To address this issue, I took the following steps:
 
-I created a file __csi.tf__  for the __CSI driver__
+I added a file __csi.tf__ to my terraform files to create the __CSI driver__
 
 ```
 data "aws_iam_policy" "ebs_csi_policy" {

@@ -1,2 +1,2 @@
 # Project-24
-Building Elastic Kubernetes Service (EKS) with Terraform.
+Setting up Elastic Kubernetes Service (EKS) with Terraform and Deploying Jenkins Server using Helm.

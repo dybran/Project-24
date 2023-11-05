@@ -551,6 +551,12 @@ Get the pod
 
 ![](./images/321.PNG)
 
+We can watche the pods get created by runnint the command
+
+`$ watch -x kubectl get pod -n jenkins`
+
+The __watch__ command is used to periodically execute another command and display its output in a continuously updating format. In this case, I am using it with __kubectl__ to monitor the status of resources in a Kubernetes cluster.
+
 Describe the pod
 
 `$ kubectl describe pod jenkins-0 -n jenkins`
@@ -665,9 +671,9 @@ Accessing the jenkins through the UI, we need to __port forward__.
 
 ![](./images/port.PNG)
 
-Port forwarding in Kubernetes is a way to access a specific port of a container running within a Kubernetes cluster from outside the cluster. It allows you to establish a temporary network connection from your local machine or another system to a specific port of a pod in the Kubernetes cluster, enabling you to interact with the application or service running in that pod. Port forwarding is commonly used for debugging, testing, or accessing services that are not exposed publicly.
+Port forwarding in Kubernetes is a way to access a specific port of a container running within a Kubernetes cluster from outside the cluster. It allows you to establish a temporary network connection from your __local machine or another system to a specific port of a pod in the Kubernetes cluster__, enabling you to interact with the application or service running in that pod. Port forwarding is commonly used for debugging, testing, or accessing services that are not exposed publicly.
 
-Go to the browser and access the Jenkins using __127.0.0.1:8080__
+Go to the browser and access the Jenkins using __127.0.0.1:8080__ or __localhost:8080__
 
 ![](./images/1321.PNG)
 

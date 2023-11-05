@@ -1,4 +1,4 @@
-## __BUILDING ELASTIC KUBERNETES SERVICE (EKS) WITH TERRAFORM__
+## __SETTING UP EKS WITH TERRAFORM & DEPLOYING JENKINS SERVER USING HELM__
 
 In this extensive project, our primary emphasis will be on the practical real-world implementation of Kubernetes deployment and management. This involves a series of tasks geared toward guaranteeing the resilience and scalability of our system. The key objectives include:
 

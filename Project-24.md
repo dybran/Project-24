@@ -19,7 +19,7 @@ Create a directory on your local machine - __eks__ and create an s3 bucket
 ![](./images/ekst.PNG)
 ![](./images/ekstt.PNG)
 
-Create a file – __backend.tf__ Task for you, ensure the backend is configured for remote state.
+Create a file – __backend.tf__ and configured for remote state.
 
 Create a file – __network.tf__ and provision Elastic IP for Nat Gateway, VPC, Private and public subnets.
 
